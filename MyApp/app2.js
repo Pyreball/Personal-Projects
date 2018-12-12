@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Button,
-  Alert,
-  ScrollView
-} from "react-native";
+import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { Vibration } from "react-native";
 
 class StopWatch extends Component {
@@ -22,9 +15,7 @@ class StopWatch extends Component {
     BreakTotalSec: "00",
     BreakTotalMin: "00",
     BreakTotalHour: "00",
-    onBreak: false,
-    typearray: [],
-    timearray: []
+    onBreak: false
   };
 
   constructor(props) {
@@ -43,7 +34,6 @@ class StopWatch extends Component {
   componentWillUnmount() {
     clearInterval(this.state.timer);
     clearInterval(this.state.worktimer);
-    clearInterval(this.state.breakTimer);
   }
 
   start() {
@@ -60,22 +50,14 @@ class StopWatch extends Component {
         hr = (Number(this.state.Hour) + 1).toString();
         min = "00";
       }
-      if (seconds % 30 == 0 && this.state.onBreak == false) {
-        this.StartBreakTimer();
+      if (seconds % 5 == 0 && this.state.onBreak == false) {
         this.state.onBreak = true;
-        this.setState({
-          typearray: this.state.typearray.concat(this.state.onBreak.toString())
-        });
         Vibration.vibrate();
-        Alert.alert("Time for a Break.");
+        Alert.alert(String(this.state.onBreak));
         this.StopWorkTimer();
       }
-      if (seconds % 20 == 0 && this.state.onBreak == true) {
-        this.StopBreakTimer();
+      if (seconds % 10 == 0 && this.state.onBreak == true) {
         this.state.onBreak = false;
-        this.setState({
-          typearray: this.state.typearray.concat(this.state.onBreak.toString())
-        });
         Vibration.vibrate();
         Alert.alert("Break is now over. Start Studying again.");
         this.StartWorkTimer();
@@ -113,16 +95,16 @@ class StopWatch extends Component {
   }
   startBreak() {
     var self = this;
-    let breakTimer = setInterval(() => {
-      var seconds = (Number(this.state.BreakTotalSec) + 1).toString(),
-        min = this.state.BreakTotalMin,
-        hr = this.state.BreakTotalHour;
-      if (Number(this.state.BreakTotalSec) == 59) {
-        min = (Number(this.state.BreakTotalMin) + 1).toString();
+    let timer = setInterval(() => {
+      var seconds = (Number(this.state.sec) + 1).toString(),
+        min = this.state.Min,
+        hr = this.state.Hour;
+      if (Number(this.state.sec) == 59) {
+        min = (Number(this.state.Min) + 1).toString();
         seconds = "00";
       }
-      if (Number(this.state.BreakTotalMin) == 59) {
-        hr = (Number(this.state.BreakTotalHour) + 1).toString();
+      if (Number(this.state.Min) == 59) {
+        hr = (Number(this.state.Hour) + 1).toString();
         min = "00";
       }
       self.setState({
@@ -131,18 +113,15 @@ class StopWatch extends Component {
         BreakTotalSec: seconds.length == 1 ? "0" + seconds : seconds
       });
     }, 1000);
-    this.setState({ breakTimer });
+    this.setState({ timer });
   }
 
   ButtonStart() {
     this.start();
-    this.startWork();
   }
 
   ButtonStop() {
     clearInterval(this.state.timer);
-    clearInterval(this.state.worktimer);
-    clearInterval(this.state.breakTimer);
   }
   StartWorkTimer() {
     this.startWork();
@@ -150,59 +129,31 @@ class StopWatch extends Component {
   StopWorkTimer() {
     clearInterval(this.state.worktimer);
   }
-  StartBreakTimer() {
-    this.startBreak();
-  }
-  StopBreakTimer() {
-    clearInterval(this.state.breakTimer);
-  }
 
   ButtonClear() {
     this.setState({
       timer: null,
-      worktimer: null,
       sec: "00",
       Min: "00",
       Hour: "00",
-      WorkTotalSec: "00",
-      WorkTotalMin: "00",
-      WorkTotalHour: "00",
-      BreakTotalSec: "00",
-      BreakTotalMin: "00",
-      BreakTotalHour: "00",
-      onBreak: false
+      WorkTotal: "00",
+      BreakTotal: "00"
     });
   }
 
   render() {
-    var Hour = this.state.Hour;
-    var Min = this.state.Min;
-    var Sec = this.state.sec;
-    var TotalTime = Hour + ":" + Min + ":" + Sec;
-    var type = this.state.onBreak;
     return (
       <View>
         <Text styles={styles.counter}>
-          Total Time: {TotalTime} {"\n"}
+          Total Time: {this.state.Hour}:{this.state.Min}:{this.state.sec}
           Work Time Total: {this.state.WorkTotalHour}:{this.state.WorkTotalMin}:
           {this.state.WorkTotalSec}
-          {"\n"}
-          Break Time Total: {this.state.BreakTotalHour}:
+          Break Time TOtal: {this.state.BreakTotalHour}:
           {this.state.BreakTotalMin}:{this.state.BreakTotalSec}
         </Text>
         <Button title="Start" onPress={this.ButtonStart} />
         <Button title="Stop" onPress={this.ButtonStop} />
         <Button title="Clear" onPress={this.ButtonClear} />
-
-        {this.state.typearray.map((item, key) => (
-          <Text key={key} style={styles.TextStyle}>
-            {item} {TotalTime}
-          </Text>
-        ))}
-        <View style={styles.laps}>
-          <Text style={styles.laps}>{type == false ? "Work" : "Break"} </Text>
-          <Text style={styles.laps}>{TotalTime} </Text>
-        </View>
       </View>
     );
   }
@@ -231,11 +182,29 @@ const styles = StyleSheet.create({
     height: 60,
     margin: 10
   },
-  laps: {
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  scrollView: {
-    alignSelf: "stretch"
+  miniCounter: {
+    fontSize: 20,
+    position: "relative",
+    top: -32,
+    right: -50
   }
 });
+
+
+function Lap({ type , interval}) {
+    return <View style={styles.laps}>
+        <Text style={styles.laps}>Lap {number} </Text>
+        <Text style={styles.laps}>{interval} </Text>
+      </View>;
+  }
+function LapsTable({laps, timer}){
+    return(
+      <ScrollView style={styles.scrollView}>
+        {laps.map((lap, index)=>(
+          <Lap
+           type={index}
+           interval={timer} />
+        ))}
+      </ScrollView>
+    )
+  }
