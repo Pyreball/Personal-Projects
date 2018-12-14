@@ -1,5 +1,6 @@
 import React from 'react'
-import {Text, View, TextInput, StyleSheet} from 'react-native'
+import {Text, View, TextInput, StyleSheet, KeyboardAvoidingView} from 'react-native'
+import {Header} from 'react-navigation';
 
 export class EditCardScreen extends React.Component {
     static navigationOptions = ({navigation}) => {
@@ -24,20 +25,20 @@ export class EditCardScreen extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset = {Header.HEIGHT + 20} behavior = "padding" enabled>
                 <View style={styles.inputArea}>
                     <Text>Card Name: </Text>
                     <TextInput style={styles.inputTextSmall} value={this.state.name}/>
                 </View>
                 <View style={styles.inputArea}>
                     <Text>Card Points: </Text>
-                    <TextInput style={styles.inputTextSmall} keyboardType='numeric' value={this.state.points}/>
+                    <TextInput style={styles.inputTextSmall} keyboardType='numeric' value={this.state.points} onChangeText={(points) => this.setState({points})}/>
                 </View>
                 <View style={[styles.inputArea, {height: 110} ]} >
                     <Text>Card Description: </Text>
-                    <TextInput multiline={true} numberOfLines={4} style={styles.inputTextLarge} value={this.state.desc}/>
+                    <TextInput multiline={true} numberOfLines={4} style={styles.inputTextLarge} value={this.state.desc} onChangeText={(desc) => this.setState({desc})}/>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }
