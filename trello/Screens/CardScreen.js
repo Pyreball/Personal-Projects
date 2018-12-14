@@ -46,7 +46,11 @@ export class Card extends React.Component {
                 <Text style={styles.cardName}>{this.props.card.name}</Text>
                 <Text style={styles.cardPoints}>{this.state.points}</Text>
                 <Text style={styles.cardDesc}>{this.state.description}</Text>
-                <TouchableOpacity style={styles.cardButton} onPress={() => this.props.navigation.navigate("EditCardScreen")}>
+                <TouchableOpacity style={styles.cardButton} onPress={() => this.props.navigation.navigate("EditCardScreen", {
+                    cardName: this.props.card.name,
+                    cardPoints: this.state.points,
+                    cardDesc: this.state.description,
+                })}>
                     <Text>Edit</Text>
                 </TouchableOpacity>
             </View>
@@ -60,7 +64,7 @@ export default class App extends React.Component {
     }
 
     render() {
-        const cards = this.props.screenProps.cards.map((card, key) => <Card card={card} key={key} navigation={this.props.navigation} />);
+        const cards = this.props.screenProps.cards.map((card, key) => <Card card={card} /*key={key}*/ navigation={this.props.navigation} />);
 
         return (
             <View style={styles.container}>
