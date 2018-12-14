@@ -11,12 +11,3 @@ export const fetchCards = async () => {
         console.log(err);
     }
 }
-
-const processCards = (card) => {
-    return {
-        name: card.name,
-        desc: card.desc
-    }
-}
-
-const addKeys = (val, key) => ({key, ...val});

@@ -7,20 +7,32 @@
  */
 
 import React from 'react';
-import {Platform, StyleSheet, Text, View, ViewPagerAndroid} from 'react-native';
+import {Platform, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
     android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+        'Double tap R on your keyboard to reload,\n' +
+        'Shake or press menu button for dev menu',
 });
 
-const Card = props => (
-    <View style={styles.pageStyle}>
-        <Text>{props.card.name}</Text>
-    </View>
-)
+export class Card extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <View style={styles.cardStyle} key={this.props.key}>
+                <Text style={styles.cardName}>{this.props.card.name}</Text>
+                <Text>{this.props.key}</Text>
+                <TouchableOpacity style={styles.cardButton}>
+                    <Text>Edit</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+}
 
 export default class App extends React.Component {
     constructor(props) {
@@ -33,9 +45,11 @@ export default class App extends React.Component {
         );
 
         return (
-            <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
-                {cards}
-            </ViewPagerAndroid>
+            <View style={styles.container}>
+                <ScrollView style={styles.viewPager} horizontal={true}>
+                    {cards}
+                </ScrollView>
+            </View>
         );
     }
 }
@@ -45,23 +59,26 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
+        backgroundColor: '#f3f3f3',
     },
     viewPager: {
         flex: 1
     },
-    pageStyle: {
+    cardStyle: {
+        height: "95%",
         alignItems: 'center',
         padding: 20,
+        flex: 1,
+        backgroundColor: "#ffffff",
+        margin: 12
+    },
+    cardName: {
+        fontSize: 36,
+        textAlign: 'center'
+    },
+    cardButton: {
+        alignItems: 'center',
+        backgroundColor: '#DDDDDD',
+        padding: 10
     }
 });
