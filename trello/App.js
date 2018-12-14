@@ -12,16 +12,17 @@ import CardScreen from './Screens/CardScreen';
 import LoginScreen from './Screens/LoginScreen';
 import EditCardScreen from './Screens/EditCardScreen';
 import {createStackNavigator, createAppContainer} from "react-navigation";
-import { fetchCards } from "./api";
+import {fetchCards} from "./api";
 
-const AppNavigator = createStackNavigator({
-    CardScreen: {
-        screen: CardScreen
+const AppNavigator = createStackNavigator(
+    {
+        CardScreen: CardScreen,
+        EditCardScreen: EditCardScreen
     },
-    EditCardScreen: {
-        screen: EditCardScreen
+    {
+        initialRouteName: "CardScreen"
     }
-});
+);
 
 export default class App extends React.Component {
     constructor(props) {
@@ -37,12 +38,12 @@ export default class App extends React.Component {
 
     getCards = async () => {
         const cards = await fetchCards();
-        this.setState({ cards: cards });
+        this.setState({cards: cards});
     }
 
     render() {
         const AppContainer = createAppContainer(AppNavigator);
-        return (<AppContainer screenProps={{ cards: this.state.cards }} />);
+        return (<AppContainer screenProps={{cards: this.state.cards}}/>);
     }
 }
 
