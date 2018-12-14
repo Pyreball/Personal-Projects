@@ -7,18 +7,27 @@
  */
 
 import React from 'react';
-import {Platform, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    ScrollView,
+    TouchableOpacity
+} from 'react-native';
 
 const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-    android:
-        'Double tap R on your keyboard to reload,\n' +
-        'Shake or press menu button for dev menu',
+    ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
+    android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev men' +
+            'u'
 });
 
 export class Card extends React.Component {
     constructor(props) {
         super(props);
+    }
+    _onEditPress = () => {
+        navigate('EditCardScreen')
     }
 
     render() {
@@ -26,7 +35,7 @@ export class Card extends React.Component {
             <View style={styles.cardStyle} key={this.props.key}>
                 <Text style={styles.cardName}>{this.props.card.name}</Text>
                 <Text>{this.props.key}</Text>
-                <TouchableOpacity style={styles.cardButton}>
+                <TouchableOpacity style={styles.cardButton} onPress={this._onEditPress}>
                     <Text>Edit</Text>
                 </TouchableOpacity>
             </View>
@@ -40,9 +49,11 @@ export default class App extends React.Component {
     }
 
     render() {
-        const cards = this.props.screenProps.cards.map((card, key) =>
-            <Card card={card} key={key}/>
-        );
+        const cards = this
+            .props
+            .screenProps
+            .cards
+            .map((card, key) => <Card card={card} key={key}/>);
 
         return (
             <View style={styles.container}>
@@ -57,9 +68,8 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f3f3f3',
+        backgroundColor: '#f3f3f3'
     },
     viewPager: {
         flex: 1
@@ -67,6 +77,7 @@ const styles = StyleSheet.create({
     cardStyle: {
         height: "95%",
         alignItems: 'center',
+        width: "100%",
         padding: 20,
         flex: 1,
         backgroundColor: "#ffffff",
