@@ -7,26 +7,53 @@
  */
 
 import React from 'react';
-import {Platform, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
-
-const instructions = Platform.select({
-    ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-    android:
-        'Double tap R on your keyboard to reload,\n' +
-        'Shake or press menu button for dev menu',
-});
+import {Platform, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
 
 export class Card extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            json: this.props.card.desc,
+            points: '',
+            description: ''
+        }
     }
 
+    componentWillMount() {
+        if(this.state.json === '' || this.state.json === undefined) {
+            let temp = {
+                points: 'Points not set',
+                description: 'No Description'
+            }
+            this.setState({
+                json: temp,
+                points: temp.points,
+                description: temp.description
+            })
+        } else {
+            let temp = JSON.parse(this.state.json);
+            this.setState({
+                points: temp.points,
+                description: temp.description,
+            })
+        }
+    }
+
+    testPress = () => {
+        this.setState({
+            points: '5'
+        })
+    }
+
+
     render() {
+
         return (
             <View style={styles.cardStyle} key={this.props.key}>
                 <Text style={styles.cardName}>{this.props.card.name}</Text>
-                <Text>{this.props.key}</Text>
-                <TouchableOpacity style={styles.cardButton}>
+                <Text style={styles.cardPoints}>{this.state.points}</Text>
+                <Text style={styles.cardDesc}>{this.state.description}</Text>
+                <TouchableOpacity style={styles.cardButton} onPress={this.testPress}>
                     <Text>Edit</Text>
                 </TouchableOpacity>
             </View>
@@ -57,12 +84,11 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#f3f3f3',
     },
     viewPager: {
-        flex: 1
+        flexGrow: 1
     },
     cardStyle: {
         height: "95%",
@@ -70,15 +96,25 @@ const styles = StyleSheet.create({
         padding: 20,
         flex: 1,
         backgroundColor: "#ffffff",
-        margin: 12
+        margin: 12,
+        minWidth: Dimensions.get('window').width - 20
     },
     cardName: {
-        fontSize: 36,
+        fontSize: 40,
         textAlign: 'center'
     },
     cardButton: {
         alignItems: 'center',
         backgroundColor: '#DDDDDD',
         padding: 10
+    },
+    cardPoints: {
+        fontSize: 24,
+        fontWeight: '300',
+        margin: 16
+    },
+    cardDesc: {
+        fontSize: 18,
+        margin: 24,
     }
 });
