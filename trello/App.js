@@ -9,7 +9,6 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import CardScreen from './Screens/CardScreen';
-import LoginScreen from './Screens/LoginScreen';
 import EditCardScreen from './Screens/EditCardScreen';
 import {createStackNavigator, createAppContainer} from "react-navigation";
 import {fetchCards} from "./api";
@@ -43,7 +42,7 @@ export default class App extends React.Component {
 
     render() {
         const AppContainer = createAppContainer(AppNavigator);
-        return (<AppContainer screenProps={{cards: this.state.cards}}/>);
+        return (<AppContainer screenProps={{cards: this.state.cards, refreshCards: this.getCards }}/>);
     }
 }
 

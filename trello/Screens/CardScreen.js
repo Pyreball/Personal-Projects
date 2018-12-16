@@ -9,7 +9,7 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions} from 'react-native';
 
-export class Card extends React.Component {
+class Card extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,7 +42,7 @@ export class Card extends React.Component {
     render() {
 
         return (
-            <View style={styles.cardStyle} key={this.props.key}>
+            <View style={styles.cardStyle}>
                 <Text style={styles.cardName}>{this.props.card.name}</Text>
                 <Text style={styles.cardPoints}>{this.state.points}</Text>
                 <Text style={styles.cardDesc}>{this.state.description}</Text>
@@ -50,6 +50,7 @@ export class Card extends React.Component {
                     cardName: this.props.card.name,
                     cardPoints: this.state.points,
                     cardDesc: this.state.description,
+                    cardID: this.props.card.id,
                 })}>
                     <Text>Edit</Text>
                 </TouchableOpacity>
@@ -64,7 +65,7 @@ export default class App extends React.Component {
     }
 
     render() {
-        const cards = this.props.screenProps.cards.map((card, key) => <Card card={card} /*key={key}*/ navigation={this.props.navigation} />);
+        const cards = this.props.screenProps.cards.map((card, index) => <Card card={card} key={index} navigation={this.props.navigation}/>);
 
         return (
             <View style={styles.container}>

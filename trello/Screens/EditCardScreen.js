@@ -1,6 +1,7 @@
 import React from 'react'
-import {Text, View, TextInput, StyleSheet, KeyboardAvoidingView} from 'react-native'
+import {Text, View, TextInput, StyleSheet, KeyboardAvoidingView, TouchableOpacity} from 'react-native'
 import {Header} from 'react-navigation';
+import { saveCard } from "../api";
 
 export class EditCardScreen extends React.Component {
     static navigationOptions = ({navigation}) => {
@@ -11,16 +12,22 @@ export class EditCardScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        const {navigation} = this.props;
+        const { navigation } = this.props;
         const cardName = navigation.getParam('cardName', 'No Name'); /// getParam( name of param, fallback if doesn't exist)
         const cardPoints = navigation.getParam('cardPoints', 'Points not assigned');
         const cardDescription = navigation.getParam('cardDesc', 'No description');
+        const cardID = navigation.getParam('cardID', 'No ID');
 
         this.state = {
             name: cardName,
             points: cardPoints,
-            desc: cardDescription
+            desc: cardDescription,
+            id: cardID
         }
+    }
+
+    saveCard = () => {
+        saveCard(this.state.id, this.state.name, this.state.points, this.state.desc, this.props.screenProps.refreshCards);
     }
 
     render() {
@@ -28,7 +35,7 @@ export class EditCardScreen extends React.Component {
             <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset = {Header.HEIGHT + 20} behavior = "padding" enabled>
                 <View style={styles.inputArea}>
                     <Text>Card Name: </Text>
-                    <TextInput style={styles.inputTextSmall} value={this.state.name}/>
+                    <TextInput style={styles.inputTextSmall} value={this.state.name} onChangeText={(name) => this.setState({name})}/>
                 </View>
                 <View style={styles.inputArea}>
                     <Text>Card Points: </Text>
@@ -38,6 +45,9 @@ export class EditCardScreen extends React.Component {
                     <Text>Card Description: </Text>
                     <TextInput multiline={true} numberOfLines={4} style={styles.inputTextLarge} value={this.state.desc} onChangeText={(desc) => this.setState({desc})}/>
                 </View>
+                <TouchableOpacity onPress={this.saveCard}>
+                    <Text>Save</Text>
+                </TouchableOpacity>
             </KeyboardAvoidingView>
         )
     }
