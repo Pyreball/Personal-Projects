@@ -1,8 +1,12 @@
 import React, {Component} from 'react'
 import {Text, View, Button} from 'react-native'
+import SectionListStudents from './SectionListStudents'
 
 export class StudentList extends Component {
-    static navigationOptions = ({navigation}) => ({title: 'Student List', headerRight: <Button title='Settings' onPress ={() => navigation.navigate("SettingScreen")}/>})
+    static navigationOptions = ({navigation}) => (
+        {title: 'Student List', 
+        headerRight: <Button title='Add Student' onPress ={() => navigation.navigate('addStudent')}/>
+        })
     _Settings = () => {
         this
             .props
@@ -18,9 +22,7 @@ export class StudentList extends Component {
     render() {
         return (
             <View>
-                <Text>
-                    Student List Page
-                </Text>
+              
                 <Button title="Settings" onPress={this._SettingsMenue}/>
             </View>
         )

@@ -29,6 +29,8 @@ import Auth from './Screens/AuthScreen';
 import Main from './Screens/Main';
 import StudentList from './Screens/StudentList';
 import SettingScreen from './Screens/SettingScreen';
+import addStudent from './Screens/addStudent';
+import { fetchStudents } from './Screens/api'
 import {createStackNavigator, createAppContainer} from "react-navigation";
 
 const AppNavigator = createStackNavigator({
@@ -43,14 +45,32 @@ const AppNavigator = createStackNavigator({
     },
     SettingScreen: {
         screen: SettingScreen
+    },
+    addStudent: {
+        screen: addStudent
     }
 });
 
 type Props = {};
 export default class App extends Component < Props > {
+    state = {
+        students: null,
+    }
+    componentDidMount() {
+        this._getStudents();
+    }
+    _getStudents = async () => {
+        const results = await fetchStudents();
+        this.setSTate({students : results})
+    }
+    _addnewStudent = (newStudent) => {
+        this.setSTate({
+            students: [...this.state.students, newStudent]
+        })
+    }
     render() {
         const AppContainer = createAppContainer(AppNavigator);
-        return (<AppContainer/>);
+        return (<AppContainer screenProps ={{ students: this.state.students, onSubmit: this.addSTudent}} />);
     }
 }
 
