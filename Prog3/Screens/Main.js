@@ -1,11 +1,8 @@
 import React, {Component} from 'react'
-import {Text, View, StyleSheet, Button} from 'react-native'
+import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native'
 
 export class Main extends Component {
-    static navigationOptions =({navigation}) => ({
-        title: 'Class List',
-        headerRight: <Button title='Settings' onPress ={()=> navigation.navigate("SettingScreen")}/>
-    })
+    static navigationOptions = ({navigation}) => ({title: 'Class List', headerRight: <Button title='Settings' onPress ={() => navigation.navigate("SettingScreen")}/>})
     _Settings = () => {
         this
             .props
@@ -24,7 +21,10 @@ export class Main extends Component {
                 <Text style={styles.text}>
                     THIS IS THE MAINPAGE!!!!!
                 </Text>
-                <Button title="This is some class" onPress={this._NavigateClass}/>
+                <TouchableOpacity style={styles.button} onPress={this._NavigateClass}>
+                    <Text> Class 2430</Text>
+                </TouchableOpacity>
+                
             </View>
         )
     }
@@ -37,6 +37,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#000000'
     },
+    button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10
+  },
     text: {
         color: '#ffffff'
     }

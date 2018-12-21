@@ -1,25 +1,27 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import React, {Component} from 'react';
+import { StyleSheet, Text, View, Button, } from 'react-native';
+
 
 export class studentDetail extends Component {
 
     static navigationOptions = ({ navigation }) => ({
         headerTitle: navigation.getParam('name'),
     })
-
-    _RndStudent = () => {
-        let studentList = this.props.screenProps.studentListlet id = rand()
-    }
-
-
-
   render() {
     return (
-      <View>
-        <Text> textInComponent </Text>
-      </View>
+      <View style={styles.container}>
+                <Text> Phone Number: </Text>
+                <Text>{this.props.navigation.getParam('number')} </Text>
+            </View>
     )
   }
 }
-
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+});
 export default studentDetail

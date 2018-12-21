@@ -30,6 +30,7 @@ import Main from './Screens/Main';
 import StudentList from './Screens/StudentList';
 import SettingScreen from './Screens/SettingScreen';
 import addStudent from './Screens/addStudent';
+import studentDetail from './Screens/studentDetail';
 import { fetchStudents } from './Screens/api'
 import {createStackNavigator, createAppContainer} from "react-navigation";
 
@@ -48,6 +49,9 @@ const AppNavigator = createStackNavigator({
     },
     addStudent: {
         screen: addStudent
+    },
+    studentDetail: {
+        screen: studentDetail
     }
 });
 
@@ -55,22 +59,40 @@ type Props = {};
 export default class App extends Component < Props > {
     state = {
         students: null,
+        classSizeMax: 30,
     }
     componentDidMount() {
         this._getStudents();
     }
+    _updateClassSize = (newSize) => {
+        this.setState({
+            classSizeMax: newSize
+        })
+    }
     _getStudents = async () => {
-        const results = await fetchStudents();
-        this.setSTate({students : results})
+        const results = await fetchStudents(this.state.classSizeMax);
+        this.setState({students : results})
     }
     _addnewStudent = (newStudent) => {
-        this.setSTate({
+        this.setState({
             students: [...this.state.students, newStudent]
+        })
+    }
+    _removeStudent = (id) => {
+        var temp = this.state.students
+        temp.forEach(function (e,i) {
+            if(e.number === id){
+                temp.splice(i,1);
+                return false;
+            }
+        })
+        this.setState({
+            students: temp
         })
     }
     render() {
         const AppContainer = createAppContainer(AppNavigator);
-        return (<AppContainer screenProps ={{ students: this.state.students, onSubmit: this.addSTudent}} />);
+        return (<AppContainer screenProps ={{ onClassUpdate: this._updateClassSize, classSizeMax: this.state.classSizeMax, students: this.state.students, onRemove: this._removeStudent, onSubmit: this._addnewStudent}} />);
     }
 }
 

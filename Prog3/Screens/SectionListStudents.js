@@ -3,11 +3,11 @@ import { SectionList, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import Row from './Row';
 
-const renderHeader = ({ section }) => <Text>{section.title}</Text>
+const renderSectionHeader = ({ section }) => <Text>{section.title}</Text>
 
 const SectionListStudents = props => {
-
-  const renderItem = ({ item }) => <Row {...item} onSelectStudent={props.onSelectStudent} />
+  console.log(props)
+  const renderItem = ({ item }) => <Row {...item} onRemove={props.onRemove} onSelectStudent={props.onSelectStudent} onValueChange={props.onValueChange}/>
 
   const studentsByLetter = props.students.reduce((obj, student) => {
     const firstLetter = student.name[0].toUpperCase()
@@ -17,18 +17,16 @@ const SectionListStudents = props => {
     }
   }, {})
 
-  const sections = Object.keys( ).sort().map(letter => ({
+  const sections = Object.keys(studentsByLetter).sort().map(letter => ({
     data: studentsByLetter[letter],
     title: letter,
   }))
 
-  return <SectionList sections={sections} renderItem={renderItem} renderHeader={renderHeader} />
+  return <SectionList sections={sections} renderItem={renderItem} renderSectionHeader={renderSectionHeader} />
 }
 
 
-SectionListStudents.propTypes = {
-  students: PropTypes.array,
-}
+
 
 
 export default SectionListStudents;
